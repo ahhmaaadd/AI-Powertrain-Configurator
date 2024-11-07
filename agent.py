@@ -19,6 +19,8 @@ from langchain_core.prompts import PromptTemplate
 
 from tools.vector import get_movie_plot
 
+from tools.cypher import cypher_qa
+
 # Create a movie chat chain
 chat_prompt = ChatPromptTemplate.from_messages(
     [
@@ -39,6 +41,12 @@ tools = [
         name="Movie Plot Search",
         description="For when you need to find information about movies based on a plot.",
         func=get_movie_plot,
+    ),
+    Tool.from_function(
+        name="Movie Information",
+        description="Provide information about movies questions using Cypher",
+        func=cypher_qa
+
     )
 ]
 
