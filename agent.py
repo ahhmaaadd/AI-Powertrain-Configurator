@@ -17,34 +17,31 @@ from langchain.callbacks import get_openai_callback
 
 from langchain_core.prompts import PromptTemplate
 
-from tools.vector import get_movie_plot
+
 
 from tools.cypher import cypher_qa
 
-# Create a movie chat chain
+# Create a powertrain chat chain
 chat_prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", "You are a movie expert providing information about movies"),
+        ("system", "You are a systems design  expert providing information about vehicle power-trains"),
         ("human", "{input}"),
     ]
 )
 
-movie_chat = chat_prompt | llm | StrOutputParser()
+powertrain_chat = chat_prompt | llm | StrOutputParser()
 # Create a set of tools
+
 tools = [
+   
     Tool.from_function(
         name="General Chat",
-        description="For general movie chat not covered by other tools",
-        func=movie_chat.invoke,
+        description="For general chat about power-trains not covered by other tools",
+        func=powertrain_chat.invoke,
     ),
     Tool.from_function(
-        name="Movie Plot Search",
-        description="For when you need to find information about movies based on a plot.",
-        func=get_movie_plot,
-    ),
-    Tool.from_function(
-        name="Movie Information",
-        description="Provide information about movies questions using Cypher",
+        name="Components Information",
+        description="Provide information about components or powertrain questions using Cypher",
         func=cypher_qa
 
     )
@@ -58,9 +55,19 @@ def get_memory(session_id):
 
 # Create the agent
 agent_prompt = PromptTemplate.from_template("""
-You are a movie expert providing information about movies.
+You are a vehicle powertrain design expert using a Neo4j knowledge graph.
+
+Your task is to generate valid powertrain configurations in the format:
+[Component1]-[Component2]-[Component3]-...-[ComponentN].
+
+Rules:
+1. Start with a component that has no input energy (e.g., "FuelTank").
+2. Connect components based on matching energy outputs and inputs.
+3. Stop when a component with no output energy (e.g., "Vehicle Block") is reached.
+4. Use the schema and relationships in the knowledge graph to validate connections.
+
 Be as helpful as possible and return as much information as possible.
-Do not answer any questions that do not relate to movies, actors or directors.
+Do not answer any questions that do not relate to cars, powertrains  or their components.
 
 Do not answer any questions using your pre-trained knowledge, only use the information provided in the context.
 
@@ -84,7 +91,7 @@ When you have a response to say to the Human, or if you do not need to use a too
 
 ```
 Thought: Do I need to use a tool? No
-Final Answer: [your response here]
+Final Answer: [your response in the form: [Component1]-[Component2]-[Component3]-...-[ComponentN]]
 ```
 
 Begin!
@@ -100,7 +107,8 @@ agent = create_react_agent(llm, tools, agent_prompt)
 agent_executor = AgentExecutor(
     agent=agent,
     tools=tools,
-    verbose=True
+    verbose=True,
+    handle_parsing_errors=True
 )
 
 chat_agent = RunnableWithMessageHistory(

@@ -3,12 +3,12 @@ from utils import write_message
 from agent import generate_response
 
 # Page Config
-st.set_page_config("Ebert", page_icon=":movie_camera:")
+st.set_page_config("Powertrain Assistant", page_icon=":gear:")
 
 # Set up Session State
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi, I'm the your  Chatbot!  How can I help you?"},
+        {"role": "assistant", "content": "Hi, I'm  your  Chatbot!  How can I help you?"},
     ]
 
 # Submit handler
