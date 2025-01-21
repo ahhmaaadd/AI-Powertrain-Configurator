@@ -1,4 +1,32 @@
-= Build an Neo4j-backed Chatbot using Python
+# Vehicle Powertrain Design Assistant
+
+An AI-powered tool for designing and configuring vehicle powertrains. This system integrates a Neo4j knowledge graph, OpenAI's language model, and a Streamlit-based UI to enable intelligent powertrain configuration and retrieval. It automates Cypher query generation and leverages vector-based search for enhanced retrieval capabilities.
+
+---
+
+## Features
+
+- **Conversational Interface**: A chatbot to assist users in querying and designing vehicle powertrain configurations.
+- **Neo4j Graph Integration**: Knowledge graph for storing powertrain component relationships and energy flows.
+- **Cypher Query Automation**: Dynamically generates Cypher queries to extract relevant data.
+- **Vector Search**: Embedding-based retrieval for context-aware document queries.
+- **Streamlit UI**: Interactive and user-friendly web-based interface.
+
+---
+
+## Project Structure
+
+- **`agent.py`**: Defines the conversational AI agent using LangChain tools and prompts.
+- **`bot.py`**: Streamlit-based UI for interacting with the chatbot.
+- **`cypher.py`**: Implements Cypher Query Generation for retrieving powertrain configurations.
+- **`vector.py`**: Sets up Neo4j Vector Search for embedding-based document retrieval.
+- **`graph.py`**: Manages Neo4j database connection and querying.
+- **`llm.py`**: Configures the OpenAI language model and embeddings.
+- **`DatabaseTest.py`**: Verifies the Neo4j database connection.
+- **`utils.py`**: Helper functions for Streamlit session state management.
+- **`requirements.txt`**: List of required Python libraries for the project.
+
+---
 
 == Running the application
 
